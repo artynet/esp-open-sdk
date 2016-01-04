@@ -86,7 +86,15 @@ with :
 
 `LD_FLAGS = -L/opt/local/lib`
 
-othewise the **crosstools-NG** package won't build.
+otherwise the **crosstools-NG** package won't build.
+
+In addition to the development tools MacOS needs a case-sensitive filesystem.
+You might need to create a virtual disk and build esp-open-sdk on it:
+```bash
+$ sudo hdiutil create ~/Documents/case-sensitive.dmg -volname "case-sensitive" -size 10g -fs "Case-sensitive HFS+"
+$ sudo hdiutil mount ~/Documents/case-sensitive.dmg
+$ cd /Volumes/case-sensitive
+```
 
 ###### Preliminary steps for MacOS
 
@@ -98,14 +106,6 @@ $ sed -i.bak '1s/^/gettext=\'$'\n/' crosstool-NG/kconfig/Makefile
 $ sed -i.bak -e 's/[[:<:]]sed[[:>:]]/gsed/' Makefile
 $ sed -i.bak -e 's/[[:<:]]awk[[:>:]]/\$(AWK)/' lx106-hal/src/Makefile.am
 $ sed -i.bak 's/AM_PROG_AS/AM_PROG_AS\'$'\nAM_PROG_AR/' lx106-hal/configure.ac
-```
-
-In addition to the development tools MacOS needs a case-sensitive filesystem.
-You might need to create a virtual disk and build esp-open-sdk on it:
-```bash
-$ sudo hdiutil create ~/Documents/case-sensitive.dmg -volname "case-sensitive" -size 10g -fs "Case-sensitive HFS+"
-$ sudo hdiutil mount ~/Documents/case-sensitive.dmg
-$ cd /Volumes/case-sensitive
 ```
 
 Building
