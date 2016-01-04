@@ -56,10 +56,48 @@ $ sudo apt-get install libtool-bin
 ```
 
 ## MacOS:
+
+###### Using BREW
+
 ```bash
 $ brew tap homebrew/dupes
 $ brew install binutils coreutils automake wget gawk libtool gperf gnu-sed --with-default-names grep
 $ export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+```
+
+###### Using MACPORTS
+
+Install the following prerequisites using the **port** tool :
+
+```bash
+$ sudo port selfupdate
+$ sudo port -v install git gsed gawk binutils gperf grep gettext py-serial wget libtool autoconf automake
+$ export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+```
+once finished, edit the file :
+
+`${SDK_ROOT}/crosstools-NG/kconfig/Makefile`
+
+and replace :
+
+`LD_FLAGS = `
+
+with :
+
+`LD_FLAGS = -L/opt/local/lib`
+
+othewise the **crosstools-NG** package won't build.
+
+###### Preliminary steps for MacOS
+
+be sure to run these commands before starting the build :
+
+```bash
+$ cd esp-open-sdk
+$ sed -i.bak '1s/^/gettext=\'$'\n/' crosstool-NG/kconfig/Makefile
+$ sed -i.bak -e 's/[[:<:]]sed[[:>:]]/gsed/' Makefile
+$ sed -i.bak -e 's/[[:<:]]awk[[:>:]]/\$(AWK)/' lx106-hal/src/Makefile.am
+$ sed -i.bak 's/AM_PROG_AS/AM_PROG_AS\'$'\nAM_PROG_AR/' lx106-hal/configure.ac
 ```
 
 In addition to the development tools MacOS needs a case-sensitive filesystem.
