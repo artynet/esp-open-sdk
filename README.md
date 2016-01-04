@@ -72,7 +72,7 @@ Install the following prerequisites using the **port** tool :
 ```bash
 $ sudo port selfupdate
 $ sudo port -v install git gsed gawk binutils gperf grep gettext py-serial wget libtool autoconf automake
-$ export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+$ export PATH="/opt/local/libexec/gnubin:$PATH"
 ```
 once finished, edit the file :
 
