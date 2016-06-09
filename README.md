@@ -36,7 +36,7 @@ Requirements and Dependencies
 
 To build the standalone SDK and toolchain, you need a GNU/POSIX system
 (Linux, BSD, MacOSX, Windows with Cygwin) with the standard GNU development
-tools installed: gcc, binutils, flex, bison, etc.
+tools installed: bash, gcc, binutils, flex, bison, etc.
 
 Please make sure that the machine you use to build the toolchain has at least
 1G free RAM+swap (or more, which will speed up the build).
@@ -47,7 +47,7 @@ Ubuntu 14.04:
 ```
 $ sudo apt-get install make unrar autoconf automake libtool gcc g++ gperf \
     flex bison texinfo gawk ncurses-dev libexpat-dev python python-serial sed \
-    git
+    git unzip bash help2man
 ```
 
 Later Debian/Ubuntu versions may require:
@@ -136,22 +136,37 @@ The project can be built in two modes:
        to a newer vendor IoT SDK releases.
     2. Abide by licensing terms of the vendor IoT SDK.
 
-To build the separated SDK:
-
-```
-$ make STANDALONE=n
-```
-
-To build the standalone SDK:
+To build the self-contained, standalone toolchain+SDK:
 
 ```
 $ make STANDALONE=y
 ```
 
-This will download all necessary components and compile them. Once done,
-the toolchain (with the Xtensa HAL library) will be available in the
-`xtensa-lx106-elf/` directory. Add its `bin/` subdirectory to your
-`$PATH` to execute `xtensa-lx106-elf-gcc` and other tools.
+This is the default choice which most people are looking for, so just the
+following is enough:
+
+```
+$ make
+```
+
+To build the bare Xtensa toolchain and leave ESP8266 SDK separate:
+
+```
+$ make STANDALONE=n
+```
+
+This will download all necessary components and compile them.
+
+Using the toolchain
+===================
+
+Once you complete build process as described above, the toolchain (with
+the Xtensa HAL library) will be available in the `xtensa-lx106-elf/`
+subdirectory. Add `xtensa-lx106-elf/bin/` subdirectory to your `PATH`
+environment variable to execute `xtensa-lx106-elf-gcc` and other tools.
+At the end of build process, the exact command to set PATH correctly
+for your case will be output. You may want to save it, as you'll need
+the PATH set correctly each time you compile for Xtensa/ESP.
 
 ESP8266 SDK will be installed in `sdk/`. If you chose the non-standalone
 SDK, run the compiler with the corresponding include and lib dir flags:
@@ -171,7 +186,7 @@ build a new SDK, run:
 $ make clean
 $ git pull
 $ git submodule sync
-$ git submodule update
+$ git submodule update --init
 ```
 
 If you don't issue `make clean` (which causes toolchain and SDK to be
